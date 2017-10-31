@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>接口文档</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+<style type="text/css">
+html, body {
+	overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+body {
+	padding-top: 70px;
+}
+
+footer {
+	padding: 30px 0;
+}
+
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+	.row-offcanvas {
+		position: relative;
+		-webkit-transition: all .25s ease-out;
+		-o-transition: all .25s ease-out;
+		transition: all .25s ease-out;
+	}
+	.row-offcanvas-right {
+		right: 0;
+	}
+	.row-offcanvas-left {
+		left: 0;
+	}
+	.row-offcanvas-right
+  .sidebar-offcanvas {
+		right: -50%; /* 6 columns */
+	}
+	.row-offcanvas-left
+  .sidebar-offcanvas {
+		left: -50%; /* 6 columns */
+	}
+	.row-offcanvas-right.active {
+		right: 50%; /* 6 columns */
+	}
+	.row-offcanvas-left.active {
+		left: 50%; /* 6 columns */
+	}
+	.sidebar-offcanvas {
+		position: absolute;
+		top: 0;
+		width: 50%; /* 6 columns */
+	}
+}
+</style>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">SoftDesign</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">首页</a></li>
+					<li><a href="#about">产品设计</a></li>
+					<li><a href="#about">需求分析</a></li>
+					<li><a href="#about">概要设计</a></li>
+					<li><a href="#about">详细设计</a></li>
+					<li class="active"><a href="api-doc-list.html">接口文档</a></li>
+					<li><a href="#about">测试</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+	<div class="container" id='interfaces'>
+		<div class="row row-offcanvas row-offcanvas-right">
+
+			<div class="col-xs-12 col-sm-9">
+				<p class="pull-right visible-xs">
+					<button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+				</p>
+
+				<div id="module4vue" class="row">
+
+					<p></p>
+
+					<div v-for="mod in modules4vue">
+						<a v-on:click="getAllInterfaces(mod.moduleId)"> <span class="glyphicon glyphicon-play"></span><font size="3">&nbsp;{{mod.moduleName}}</font>
+						</a>
+						<p></p>
+						<div v-bind:id="'module-'+mod.moduleId" data="false">
+							<div v-for="interfacesResponseModel in mod.interfacesResponseModels" class="col-xs-6 col-lg-12">
+								<p></p>
+								<a v-on:click="openOrCloseInterfacDetail(interfacesResponseModel.interfac.interfacId)"> <span class="glyphicon glyphicon-play"></span><font size="1">&nbsp;{{interfacesResponseModel.interfac.interfacName}}</font>
+								</a>
+								<hr style="height: 1px; border: none; border-top: 1px solid #337ab7;">
+								<div v-bind:id="'interfaceDetail-'+interfacesResponseModel.interfac.interfacId" data="false" hidden="hidden">
+									<p>请求地址：{{interfacesResponseModel.interfac.url}}</p>
+									<p>请求方式：{{interfacesResponseModel.interfac.requestType}}</p>
+									<p>参数数据格式：{{interfacesResponseModel.interfac.parameterFormat}}</p>
+									<p>返回数据格式：{{interfacesResponseModel.interfac.returnDataType}}</p>
+
+									<table class="table table-bordered">
+										<caption>请求参数说明</caption>
+										<tbody>
+
+											<tr>
+												<td>代码</td>
+												<td>名称</td>
+												<td>是否必须</td>
+												<td>类型</td>
+												<td>长度</td>
+												<td>枚举</td>
+												<td>示例</td>
+											</tr>
+
+											<tr v-for="para in interfacesResponseModel.parameters">
+												<td>{{para.parameterCode}}</td>
+												<td>{{para.parameterName}}</td>
+												<td>{{para.isMust}}</td>
+												<td>{{para.parameterDataType}}</td>
+												<td>{{para.maxLength}}</td>
+												<td>{{para.enumeration}}</td>
+												<td>{{para.parameterExample}}</td>
+											</tr>
+
+										</tbody>
+									</table>
+									<table class="table table-bordered">
+										<caption>返回参数说明</caption>
+										<tbody>
+
+											<tr>
+												<td>代码</td>
+												<td>名称</td>
+												<td>是否必须</td>
+												<td>类型</td>
+												<td>长度</td>
+												<td>枚举</td>
+												<td>示例</td>
+											</tr>
+
+											<tr v-for="para_re in interfacesResponseModel.parameterReturns">
+												<td>{{para_re.parameterCode}}</td>
+												<td>{{para_re.parameterName}}</td>
+												<td>{{para_re.isMust}}</td>
+												<td>{{para_re.parameterDataType}}</td>
+												<td>{{para_re.maxLength}}</td>
+												<td>{{para_re.enumeration}}</td>
+												<td>{{para_re.parameterExample}}</td>
+											</tr>
+
+										</tbody>
+									</table>
+									<hr style="height: 1px; border: none; border-top: 1px dashed #B2B8BD;" />
+									<p>试一试</p>
+									<div class="form-group">
+										<label for="name">请求地址：</label> <input type="text" class="form-control" v-bind:id="'url-'+interfacesResponseModel.interfac.interfacId" v-bind:value="interfacesResponseModel.interfac.url">
+									</div>
+
+									<div class="form-group">
+										<label for="name">请求头：</label>
+										<textarea v-bind:id="'request_headers-'+interfacesResponseModel.interfac.interfacId" class="form-control" rows="3"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="name">参数：</label>
+										<textarea v-bind:id="'textarea-'+interfacesResponseModel.interfac.interfacId"  class="form-control" rows="7"> {{interfacesResponseModel.interfac.jsonParameters}}</textarea>
+										<p style="margin-left: 0px; margin-right: 16px;" align="right">
+											<a v-bind:id="'format-'+interfacesResponseModel.interfac.interfacId" v-on:click="formatJson(interfacesResponseModel.interfac.interfacId);" data="false"><small>美化 / 压缩JSON</small></a>
+										</p>
+									</div>
+
+									<button type="button" class="btn btn-primary btn-sm" v-on:click="requestApi( interfacesResponseModel.interfac.interfacId )">提交</button>
+									<p></p>
+									<p></p>
+									<div class="form-group">
+										<label for="name">返回数据：</label>
+										<textarea v-bind:id="'response_parameter-'+interfacesResponseModel.interfac.interfacId" class="form-control" rows="5"> </textarea>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<hr>
+
+		<footer>
+			<p>&copy; 2016 Soon, Inc.</p>
+		</footer>
+
+	</div>
+
+	<script>
+	 
+	
+	var app = new Vue({
+		el : '#interfaces',
+		data : {
+			modules4vue: null,
+		},
+		mounted(){
+			
+			  var thisURL = document.URL;    
+			  var  getval =thisURL.split('?')[1];  
+			  var showval= getval.split("=")[1];  
+			   
+			this.getModules(showval)
+		},
+		methods:{
+			getModules: function (projectId){
+				 
+				let rootThis = this
+				var url = "http://192.168.1.213:8081/api-doc/interfacController/getAllModules";
+				var json_data = '{"projectId":"'+projectId+'"}';
+				$.ajax({
+					url : url,
+					type : "POST",
+					contentType : "application/json;charset=utf-8",
+					data : json_data,
+					success : function(rsData) {
+						rootThis.modules4vue = rsData.modules
+						console.log(rootThis.modules4vue)
+					},
+					error : function(rsData) {
+
+					}
+				})
+			},
+			getAllInterfaces: function(moduleId){
+				var dataValue = $("#module-"+moduleId).attr("data");
+				 
+				if(dataValue == "true"){
+					$("#module-"+moduleId).attr("hidden","hidden");
+					$("#module-"+moduleId).attr("data","false")
+				}else
+				{
+					$("#module-"+moduleId).removeAttr("hidden");
+					$("#module-"+moduleId).attr("data","true")
+					 
+					let rootThis = this
+					var url = "http://192.168.1.213:8081/api-doc/interfacController/getAllInterfaces";
+					var json_data = '{"moduleId":"'+moduleId+'"}';
+					$.ajax({
+						url : url,
+						type : "POST",
+						contentType : "application/json;charset=utf-8",
+						data : json_data,
+						success : function(rsData) {
+							for(var i = 0;i < rootThis.modules4vue.length;i++){
+								if(moduleId == rootThis.modules4vue[i].moduleId){
+								 rootThis.modules4vue[i].interfacesResponseModels = rsData.interfacesResponseModels;
+									rootThis.$set(rootThis.modules4vue,i,rootThis.modules4vue[i])
+								}
+							}
+						},
+						error : function(rsData) {
+
+						}
+					})
+				}
+			},
+			
+			//-------------------------------------------------------------------------
+			
+			openOrCloseInterfacDetail : function (interfacId) {
+				
+				var dataValue = $("#interfaceDetail-"+interfacId).attr("data");
+				 
+				if(dataValue == "true"){
+					$("#interfaceDetail-"+interfacId).attr("hidden","hidden");
+					$("#interfaceDetail-"+interfacId).attr("data","false")
+				
+				}else{
+					
+					$("#interfaceDetail-"+interfacId).removeAttr("hidden");
+					$("#interfaceDetail-"+interfacId).attr("data","true")
+				}
+			},
+			formatJson : function (textareaId) {
+				var text = $('#textarea-'+textareaId).text();
+				var data = $("#format-"+textareaId).attr("data");
+				var formatText ;
+				if(data == "false"){
+				  $("#format-"+textareaId).attr("data","true")
+				  formatText = format(text,false);
+				}else{
+				  $("#format-"+textareaId).attr("data","false")
+				  formatText = format(text,true);
+				}
+				$('#textarea-'+textareaId).text(formatText); 
+			}
+		}
+	})
+	
+	
+ 
+ function requestApi (interfacId) {
+		
+		var url = $("#url-"+interfacId).val();
+		var request_headers = $("#request_headers-"+interfacId).val();
+		var parameter = $("#textarea-"+interfacId).val();
+		var response_parameter = $("#response_parameter-"+interfacId);
+		$.ajax({
+			url : url,
+			type : "POST", 
+			headers: request_headers.trim() == "" ? {} : JSON.parse(request_headers),
+			contentType: "application/json;charset=utf-8",
+			data : parameter,
+			success : function(rsData) {
+				response_parameter.val(JSON.stringify(rsData)) ;
+			},
+			error : function(rsData) {
+				response_parameter.val("接口异常："+  JSON.stringify(rsData) ) ;
+			}
+		})
+		 
+	}  
+	
+	//---------------美化json-------------------
+	function format(txt,compress){/* 格式化JSON源码(对象转换为JSON文本) */  /*是否为压缩模式*/ 
+        var indentChar = '    ';   
+        if(/^\s*$/.test(txt)){   
+            alert('数据为空,无法格式化! ');   
+            return;   
+        }   
+        try{var data=eval('('+txt+')');}   
+        catch(e){   
+            alert('数据源语法错误,格式化失败! 错误信息: '+e.description,'err');   
+            return;   
+        };   
+        var draw=[],last=false,This=this,line=compress?'':'\n',nodeCount=0,maxDepth=0;   
+           
+        var notify=function(name,value,isLast,indent/*缩进*/,formObj){   
+            nodeCount++;/*节点计数*/  
+            for (var i=0,tab='';i<indent;i++ )tab+=indentChar;/* 缩进HTML */  
+            tab=compress?'':tab;/*压缩模式忽略缩进*/  
+            maxDepth=++indent;/*缩进递增并记录*/  
+            if(value&&value.constructor==Array){/*处理数组*/  
+                draw.push(tab+(formObj?('"'+name+'":'):'')+'['+line);/*缩进'[' 然后换行*/  
+                for (var i=0;i<value.length;i++)   
+                    notify(i,value[i],i==value.length-1,indent,false);   
+                draw.push(tab+']'+(isLast?line:(','+line)));/*缩进']'换行,若非尾元素则添加逗号*/  
+            }else   if(value&&typeof value=='object'){/*处理对象*/  
+                    draw.push(tab+(formObj?('"'+name+'":'):'')+'{'+line);/*缩进'{' 然后换行*/  
+                    var len=0,i=0;   
+                    for(var key in value)len++;   
+                    for(var key in value)notify(key,value[key],++i==len,indent,true);   
+                    draw.push(tab+'}'+(isLast?line:(','+line)));/*缩进'}'换行,若非尾元素则添加逗号*/  
+                }else{   
+                        if(typeof value=='string')value='"'+value+'"';   
+                        draw.push(tab+(formObj?('"'+name+'":'):'')+value+(isLast?'':',')+line);   
+                };   
+        };   
+        var isLast=true,indent=0;   
+        notify('',data,isLast,indent,false);   
+        return draw.join('');   
+    }     
+	 
+	</script>
+</body>
+</html>
