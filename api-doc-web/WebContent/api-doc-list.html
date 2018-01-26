@@ -10,6 +10,7 @@
 
 <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+<script src="api-doc-service-url-config.js"></script>
 <style type="text/css">
 html, body {
 	overflow-x: hidden; /* Prevent scroll on narrow devices */
@@ -148,7 +149,7 @@ footer {
 			getProjects: function (companyId,pageNum,pageSize){
 				 
 				let rootThis = this
-				var url = "../api-doc/projectController/getProjects";
+				var url = api_doc_service_url + "/projectController/getProjects";
 				var json_data = '{"companyId":"'+companyId+'","pageNum":"'+pageNum+'","pageSize":"'+pageSize+'"}';
 				$.ajax({
 					url : url,

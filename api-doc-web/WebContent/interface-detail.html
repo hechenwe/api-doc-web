@@ -86,13 +86,7 @@ footer {
 					<li class="active"><a href="api-doc-list.html">接口文档</a></li>
 					<li><a href="#about">测试</a></li>
 				</ul>
-
-				<form  class="navbar-form navbar-left">
-					<div class="form-group">
-						<input id="interfacNumber" type="text" class="form-control" placeholder="接口号">
-					</div>
-					<button type="button" class="btn btn-default" onclick="getInterfacByInterfacNumber();" >搜索</button>
-				</form>
+ 
 			</div>
 		</div>
 	</nav>
@@ -105,25 +99,17 @@ footer {
 					<button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
 				</p>
 
-				<div id="module4vue" class="row">
-
-					<p></p>
-
-					<div v-for="mod in modules4vue">
-						<a v-on:click="getAllInterfaces(mod.moduleId)"> <span class="glyphicon glyphicon-play"></span><font size="3">&nbsp;{{mod.moduleName}}</font>
-						</a>
-						<p></p>
-						<div v-bind:id="'module-'+mod.moduleId" data="false">
-							<div v-for="interfacesResponseModel in mod.interfacesResponseModels" class="col-xs-6 col-lg-12">
-								<p></p>
-								<a v-on:click="openOrCloseInterfacDetail(interfacesResponseModel.interfac.interfacId)"> <span class="glyphicon glyphicon-play"></span><font size="1"><b>{{interfacesResponseModel.interfac.interfacNumber}}</b> &nbsp;{{interfacesResponseModel.interfac.interfacName}}</font>
+				<div   class="row">
+  
+								 
+								<a >  <font size="1"><b>{{interface4vue.interfac.interfacNumber}}</b> &nbsp;{{interface4vue.interfac.interfacName}}</font>
 								</a>
 								<hr style="height: 1px; border: none; border-top: 1px solid #337ab7;">
-								<div v-bind:id="'interfaceDetail-'+interfacesResponseModel.interfac.interfacId" data="false" hidden="hidden">
-									<p>请求地址：{{interfacesResponseModel.interfac.url}}</p>
-									<p>请求方式：{{interfacesResponseModel.interfac.requestType}}</p>
-									<p>参数数据格式：{{interfacesResponseModel.interfac.parameterFormat}}</p>
-									<p>返回数据格式：{{interfacesResponseModel.interfac.returnDataType}}</p>
+								<div v-bind:id="'interfaceDetail-'+interface4vue.interfac.interfacId" data="false"  >
+									<p>请求地址：{{interface4vue.interfac.url}}</p>
+									<p>请求方式：{{interface4vue.interfac.requestType}}</p>
+									<p>参数数据格式：{{interface4vue.interfac.parameterFormat}}</p>
+									<p>返回数据格式：{{interface4vue.interfac.returnDataType}}</p>
 
 									<table class="table table-bordered">
 										<caption>请求参数说明</caption>
@@ -139,7 +125,7 @@ footer {
 												<td>示例</td>
 											</tr>
 
-											<tr v-for="para in interfacesResponseModel.parameters">
+											<tr v-for="para in interface4vue.parameters">
 												<td>{{para.parameterCode}}</td>
 												<td>{{para.parameterName}}</td>
 												<td>{{para.isMust}}</td>
@@ -151,7 +137,7 @@ footer {
 
 										</tbody>
 									</table>
-									<table v-for="pcms in interfacesResponseModel.parameterConstraintModels" class="table table-bordered">
+									<table v-for="pcms in interface4vue.parameterConstraintModels" class="table table-bordered">
 										<caption>参数[ <b>{{pcms.parameterCode}}</b> ]枚举值的说明:</caption>
 										<tbody>
 
@@ -182,7 +168,7 @@ footer {
 												<td>示例</td>
 											</tr>
 
-											<tr v-for="para_re in interfacesResponseModel.parameterReturns">
+											<tr v-for="para_re in interface4vue.parameterReturns">
 												<td>{{para_re.parameterCode}}</td>
 												<td>{{para_re.parameterName}}</td>
 												<td>{{para_re.isMust}}</td>
@@ -197,34 +183,34 @@ footer {
 									<hr style="height: 1px; border: none; border-top: 1px dashed #B2B8BD;" />
 									<p>试一试</p>
 									<div class="form-group">
-										<label for="name">请求地址：</label> <input type="text" class="form-control" v-bind:id="'url-'+interfacesResponseModel.interfac.interfacId" v-bind:value="interfacesResponseModel.interfac.url">
+										<label for="name">请求地址：</label> <input type="text" class="form-control" v-bind:id="'url-'+interface4vue.interfac.interfacId" v-bind:value="interface4vue.interfac.url">
 									</div>
 
 									<div class="form-group">
 										<label for="name">请求头：</label>
-										<textarea v-bind:id="'request_headers-'+interfacesResponseModel.interfac.interfacId" class="form-control" rows="3"></textarea>
+										<textarea v-bind:id="'request_headers-'+interface4vue.interfac.interfacId" class="form-control" rows="3"></textarea>
 									</div>
 									<div class="form-group">
 										<label for="name">参数：</label>
-										<textarea v-bind:id="'textarea-'+interfacesResponseModel.interfac.interfacId" class="form-control" rows="7"> {{interfacesResponseModel.interfac.jsonParameters}}</textarea>
+										<textarea v-bind:id="'textarea-'+interface4vue.interfac.interfacId" class="form-control" rows="7"> {{interface4vue.interfac.jsonParameters}}</textarea>
 										<p style="margin-left: 0px; margin-right: 16px;" align="right">
-											<a v-bind:id="'format-'+interfacesResponseModel.interfac.interfacId" v-on:click="formatJson(interfacesResponseModel.interfac.interfacId);" data="false"><small>美化 / 压缩JSON</small></a>
+											<a v-bind:id="'format-'+interface4vue.interfac.interfacId" v-on:click="formatJson(interface4vue.interfac.interfacId);" data="false"><small>美化 / 压缩JSON</small></a>
 										</p>
 									</div>
 
-									<button type="button" class="btn btn-primary btn-sm" v-on:click="requestApi( interfacesResponseModel.interfac.interfacId )">提交</button>
+									<button type="button" class="btn btn-primary btn-sm" v-on:click="requestApi( interface4vue.interfac.interfacId )">提交</button>
 									<p></p>
 									<p></p>
 									<div class="form-group">
 										<label for="name">返回数据：</label>
-										<textarea v-bind:id="'response_parameter-'+interfacesResponseModel.interfac.interfacId" class="form-control" rows="5"> </textarea>
+										<textarea v-bind:id="'response_parameter-'+interface4vue.interfac.interfacId" class="form-control" rows="5"> </textarea>
 									</div>
 
 								</div>
-							</div>
-						</div>
+							 
+						 
 					</div>
-				</div>
+				 
 
 			</div>
 
@@ -243,86 +229,37 @@ footer {
 	var app = new Vue({
 		el : '#interfaces',
 		data : {
-			modules4vue: null,
+			interface4vue: null,
 		},
 		mounted(){
 			
 			  var thisURL = document.URL;    
 			  var  getval =thisURL.split('?')[1];  
 			  var showval= getval.split("=")[1];  
-			   
-			this.getModules(showval)
+			this.getInterfaceByInterfacNumber(showval)
 		},
 		methods:{
-			getModules: function (projectId){
+			getInterfaceByInterfacNumber: function (interfacNumber){
 				 
 				let rootThis = this
-				var url = api_doc_service_url + "/interfacController/getAllModules";
-				var json_data = '{"projectId":"'+projectId+'"}';
+				var url = api_doc_service_url + "/interfacController/getInterfaceByInterfacNumber";
+				var json_data = '{"interfacNumber":"'+interfacNumber+'"}';
 				$.ajax({
 					url : url,
 					type : "POST",
 					contentType : "application/json;charset=utf-8",
 					data : json_data,
 					success : function(rsData) {
-						rootThis.modules4vue = rsData.modules
+						rootThis.interface4vue = rsData.interfacesResponseModel
 						console.log(rootThis.modules4vue)
 					},
 					error : function(rsData) {
 
 					}
 				})
-			},
-			getAllInterfaces: function(moduleId){
-				var dataValue = $("#module-"+moduleId).attr("data");
-				 
-				if(dataValue == "true"){
-					$("#module-"+moduleId).attr("hidden","hidden");
-					$("#module-"+moduleId).attr("data","false")
-				}else
-				{
-					$("#module-"+moduleId).removeAttr("hidden");
-					$("#module-"+moduleId).attr("data","true")
-					 
-					let rootThis = this
-					var url = api_doc_service_url + "/interfacController/getAllInterfaces";
-					var json_data = '{"moduleId":"'+moduleId+'"}';
-					$.ajax({
-						url : url,
-						type : "POST",
-						contentType : "application/json;charset=utf-8",
-						data : json_data,
-						success : function(rsData) {
-							for(var i = 0;i < rootThis.modules4vue.length;i++){
-								if(moduleId == rootThis.modules4vue[i].moduleId){
-								 rootThis.modules4vue[i].interfacesResponseModels = rsData.interfacesResponseModels;
-									rootThis.$set(rootThis.modules4vue,i,rootThis.modules4vue[i])
-								}
-							}
-						},
-						error : function(rsData) {
-
-						}
-					})
-				}
-			},
+			}
 			
-			//-------------------------------------------------------------------------
-			
-			openOrCloseInterfacDetail : function (interfacId) {
-				
-				var dataValue = $("#interfaceDetail-"+interfacId).attr("data");
-				 
-				if(dataValue == "true"){
-					$("#interfaceDetail-"+interfacId).attr("hidden","hidden");
-					$("#interfaceDetail-"+interfacId).attr("data","false")
-				
-				}else{
-					
-					$("#interfaceDetail-"+interfacId).removeAttr("hidden");
-					$("#interfaceDetail-"+interfacId).attr("data","true")
-				}
-			},
+			,
 			formatJson : function (textareaId) {
 				var text = $('#textarea-'+textareaId).text();
 				var data = $("#format-"+textareaId).attr("data");
@@ -339,11 +276,7 @@ footer {
 		}
 	})
 	
-	function getInterfacByInterfacNumber ( ) {
-		var interNumber = $("#interfacNumber").val();
-		window.location.href="interface-detail.html?interfacNumber="+interNumber;
-		
-	}
+	
  
  function requestApi (interfacId) {
 		
