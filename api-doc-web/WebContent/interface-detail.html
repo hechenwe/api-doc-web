@@ -277,7 +277,7 @@ footer {
 	})
 	
 	
- 
+ //试一试
  function requestApi (interfacId) {
 		
 		var url = $("#url-"+interfacId).val();
@@ -294,7 +294,7 @@ footer {
 				response_parameter.val(JSON.stringify(rsData)) ;
 			},
 			error : function(rsData) {
-				response_parameter.val("接口异常："+  JSON.stringify(rsData) ) ;
+				response_parameter.val("请求失败,请确认url正确或服务器内部存在异常!") ;
 			}
 		})
 		 

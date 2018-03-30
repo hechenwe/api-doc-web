@@ -87,11 +87,11 @@ footer {
 					<li><a href="#about">测试</a></li>
 				</ul>
 
-				<form  class="navbar-form navbar-left">
+				<form class="navbar-form navbar-left">
 					<div class="form-group">
 						<input id="interfacNumber" type="text" class="form-control" placeholder="接口号">
 					</div>
-					<button type="button" class="btn btn-default" onclick="getInterfacByInterfacNumber();" >搜索</button>
+					<button type="button" class="btn btn-default" onclick="getInterfacByInterfacNumber();">搜索</button>
 				</form>
 			</div>
 		</div>
@@ -152,7 +152,11 @@ footer {
 										</tbody>
 									</table>
 									<table v-for="pcms in interfacesResponseModel.parameterConstraintModels" class="table table-bordered">
-										<caption>参数[ <b>{{pcms.parameterCode}}</b> ]枚举值的说明:</caption>
+										<caption>
+											参数[
+											<b>{{pcms.parameterCode}}</b>
+											]枚举值的说明:
+										</caption>
 										<tbody>
 
 											<tr>
@@ -161,7 +165,7 @@ footer {
 											</tr>
 
 											<tr v-for="pc in pcms.parameterConstraints">
-												 
+
 												<td>{{pc.parameterConstraintCode}}</td>
 												<td>{{pc.parameterConstraintExplain}}</td>
 											</tr>
@@ -218,6 +222,12 @@ footer {
 									<div class="form-group">
 										<label for="name">返回数据：</label>
 										<textarea v-bind:id="'response_parameter-'+interfacesResponseModel.interfac.interfacId" class="form-control" rows="5"> </textarea>
+										
+										<div style="overflow:auto;width:100%" v-bind:id="'json_data_div_'+interfacesResponseModel.interfac.interfacId">
+										 
+										
+										</div>
+
 									</div>
 
 								</div>
@@ -345,6 +355,10 @@ footer {
 		
 	}
  
+	
+	
+//试一试 提交
+
  function requestApi (interfacId) {
 		
 		var url = $("#url-"+interfacId).val();
@@ -358,10 +372,15 @@ footer {
 			contentType: "application/json;charset=utf-8",
 			data : parameter,
 			success : function(rsData) {
-				response_parameter.val(JSON.stringify(rsData)) ;
+				var jsonData = JSON.stringify(rsData);
+				response_parameter.val(jsonData) ;
+				parseJsonData(rsData,interfacId);
+				//parseJson(rsData);
+				
+				 
 			},
 			error : function(rsData) {
-				response_parameter.val("接口异常："+  JSON.stringify(rsData) ) ;
+				response_parameter.val("请求失败,请确认url正确或服务器内部存在异常!") ;
 			}
 		})
 		 
@@ -406,6 +425,185 @@ footer {
         notify('',data,isLast,indent,false);   
         return draw.join('');   
     }     
+	
+	
+	
+	
+	 function getKeyAndVal(jsonObj){
+		 
+		 var  map = new Map();
+		  for (var key in jsonObj) {
+	        	 var val = jsonObj[key];
+	        	 if(typeof(val) != 'object'){
+	        	 map.set(key,val);
+	        	 }
+		  }
+		 
+		 return map;
+	 }
+	 
+	 function getObject (jsonObj){
+		 var  map = new Map()
+		 for (var key in jsonObj) {
+        	 var val = jsonObj[key];
+             var len = val.length;
+        	 if(typeof(val) == 'object' && typeof(len) == "undefined"){
+        	 map.set(key,val)
+        	 }
+	  }
+		 
+		 return map;
+		 
+	 }
+	 
+	 function getArray (jsonObj){
+		 var  map = new Map()
+		 for (var key in jsonObj) {
+        	 var val = jsonObj[key];
+             var len = val.length;
+        	 if(typeof(val) == 'object' && len > 0){
+        	 map.set(key,val)
+        	 }
+	  }
+		 
+		 return map;
+		 
+	 }
+	 
+	 
+	 function appendJsonObjTable(interfacId,caption,trs ){
+		 var json_data_div = $("#json_data_div_"+interfacId);
+		 var table = '<table width="auto" style="white-space:nowrap" class="table table-bordered"><caption>'+caption+'</caption><tbody> '+trs+' </tbody></table>';
+		 json_data_div.append(table);
+		 
+	 }
+	 
+	 
+	 function parseJsonData(jsonObj,interfacId){
+		 var keyVal = getKeyAndVal(jsonObj);
+		 var json_data_div = $("#json_data_div_"+interfacId);
+		 json_data_div.empty();
+		 var trs = getJsonKVtrs(keyVal);
+		 appendJsonObjTable(interfacId,'',trs);
+		 
+		var objectMap =  getObject(jsonObj);
+		objectMap.forEach(function (val, key, objectMap) {
+			
+			 var keyVal2 = getKeyAndVal(val);
+			
+			 var trs2 = getJsonKVtrs(keyVal2);
+			 appendJsonObjTable(interfacId,'',trs2);
+			 
+			 
+			    var arrayMap = getArray(val);
+			 
+				var trs3 = getJsonArrayTrs(arrayMap);
+
+				appendJsonObjTable(interfacId,'',trs3);
+			 
+			 
+		});
+		
+		
+		var arrayMap = getArray(jsonObj);
+		 
+		var trs4 = getJsonArrayTrs(arrayMap);
+
+		appendJsonObjTable(interfacId,'',trs4);
+	 }
+	 
+	 function getJsonKVtrs(keyVal){
+		 var trs='' ;
+		 keyVal.forEach(function (val, key, keyVal) {
+			    
+			 var tr = '<tr><td>'+key+'</td><td>'+val+'</td></tr>';
+			  
+			 trs = trs + tr;
+ 
+			});
+		 
+		 return trs;
+	 }
+	 
+	 function getJsonArrayTrs(arrayMap){
+			var i = 0 ;
+			
+			var trs2 ='';
+			arrayMap.forEach(function (val, key, arrayMap) {
+				if(i ==0 ){
+				var tr = '<tr>';
+				for(var k in val[0]){
+					 
+						 var td = '<td>'+k+'</td>';
+						 tr = tr + td;
+				}
+				tr = tr + '</tr>';
+				
+				trs2 = trs2 + tr;
+				i ++;
+				
+			}
+				
+				
+				 
+			});
+			
+			
+			arrayMap.forEach(function (val, key, arrayMap) {
+				
+				for (var v in val) {
+				     var tr = '<tr>';
+				     
+				     for( var va in val[v]){
+				    	 
+				    	 
+				    	 if(va =="createTime" || va =="updateTime" || va == "createDate" || va == "updateDate"){
+				    		 var td = '<td>'+unixTime(val[v][va]/1000,true)+'</td>'; 
+				    	 }else{
+				    		 var td = '<td>'+val[v][va]+'</td>'; 
+				    	 }
+				    	  
+					 
+					 tr = tr + td;
+				    	 
+				     }
+				     
+					 tr = tr + '</tr>';
+					 
+					trs2 = trs2 + tr;
+			    }
+				
+				 
+			});
+			
+			return trs2;
+		 
+	 }
+	 
+	 
+	 
+	 //时间戳格式化
+	 
+	 function unixTime  (unixTime, isFull, timeZone) {
+	        if (typeof (timeZone) == 'number')
+	        {
+	          unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+	        }
+	        var time = new Date(unixTime * 1000);
+	        var ymdhis = "";
+	        ymdhis += time.getUTCFullYear() + "-";
+	        ymdhis += (time.getUTCMonth()+1) + "-";
+	        ymdhis += time.getUTCDate();
+	        if (isFull === true)
+	        {
+	          ymdhis += " " + time.getUTCHours() + ":";
+	          ymdhis += time.getUTCMinutes() + ":";
+	          ymdhis += time.getUTCSeconds();
+	        }
+	        return ymdhis;
+	      }
+	
+	 
 	 
 	</script>
 </body>
