@@ -56,7 +56,7 @@
 			items = 'li:not(.divider)';
 			$menu.attr('style', '')
 				.css(tp)
-				.addClass('open')
+				//.addClass('open')
 				.on('click.context.data-api', items, $.proxy(this.onItem, this, $(e.currentTarget)))
 				.trigger('shown.bs.context', relatedTarget);
 

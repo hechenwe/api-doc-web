@@ -663,6 +663,7 @@ footer {
 					          if(parameters.length > 0){
 				                   var lis = '<li><a>参数代码 : '+parameters[0].parameterCode+'</a></li><li><a>参数名称 : '+parameters[0].parameterName+'</a></li><li><a>数据类型 : '+parameters[0].parameterDataType+'</a></li><li><a>最大长度 : '+parameters[0].maxLength+'</a></li><li><a>是否必须 : '+parameters[0].isMust+'</a></li>';
 				                   ul.append(lis);
+						           $("#context-menu").addClass("open");
 					         }else{
 						           $("#context-menu").removeClass("open");
 					         }
